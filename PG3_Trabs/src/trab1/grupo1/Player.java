@@ -26,7 +26,8 @@ public class Player {
     //Getters
     public String getName() { return name; }
     public int getNumQuizzes() { return numQuizzes; }
-    public int getPoints() { return totalQuizPoints; }
+    public int getTotalPoints() { return totalQuizPoints; }
+
 
     //Setters
     public void setNumQuizzes( int numQuizzes ) {
@@ -45,6 +46,19 @@ public class Player {
     }
 
     //Metodos de instancia
+    public int getPoints() {
+        return (numQuizzes == 0) ? 0 : (totalQuizPoints / numQuizzes);
+    }
+    public void addQuiz(int quizPoints) {
+        numQuizzes++;
+        totalQuizPoints += quizPoints;
+    }
+    public int compareTo(Player p) {
+        
+    }
+
+    //Metodos estaticos
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;                                  //verificar se os objetos referenciam o mesmo objeto

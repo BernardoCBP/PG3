@@ -10,9 +10,10 @@ public class Print {
         Player p3 = p1;
         System.out.println( p1.equals(p3) );
         if ( p3 != null )
-            System.out.println( p1==p3 );
+            System.out.println( p1 == p3 );
 
         System.out.println(p1);
-        System.out.println( p2.getName() + " " + p2.getNumQuizzes() + " " + p2.getPoints() );
+        System.out.println( p2.getName() + " " + p2.getNumQuizzes() + " " + p2.getTotalPoints());
+        System.out.println("Points:" + p2.getPoints());
     }
 }
