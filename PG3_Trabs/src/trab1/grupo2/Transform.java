@@ -15,7 +15,7 @@ public abstract class Transform {
 
     @Override
     public String toString() {
-        return name;
+        return this.name;
     }
 
     public static String getString(Transform[] tfs, String sep) {

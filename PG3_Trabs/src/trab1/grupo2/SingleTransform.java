@@ -1,8 +1,8 @@
 package trab1.grupo2;
 
-public abstract class SingleTranform extends Transform {
+public abstract class SingleTransform extends Transform {
     
-    public SingleTranform(String nm) {
+    public SingleTransform(String nm) {
         super(nm);
     }
 

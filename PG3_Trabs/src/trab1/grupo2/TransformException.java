@@ -11,10 +11,10 @@ public class TransformException extends java.lang.Exception {
     public Transform getTransform() {
         return transform;
     }
-
+    /*
     @Override
     public String getMessage() {
         return transform.toString() +
     }
-
+    */
 }

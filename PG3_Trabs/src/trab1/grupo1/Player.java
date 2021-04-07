@@ -50,17 +50,13 @@ public class Player implements Comparable<Player> {
     public int getPoints() {
         return (numQuizzes == 0) ? 0 : (totalQuizPoints / numQuizzes);
     }
+
     public void addQuiz(int quizPoints) {
         numQuizzes++;
         totalQuizPoints += quizPoints;
     }
     public int compareTo(Player p) {
-        if(this.totalQuizPoints == p.totalQuizPoints) {
-            if (this.numQuizzes == p.numQuizzes)
-                return this.name.compareTo(p.name);
-            return this.numQuizzes - p.numQuizzes;
-        }
-        return this.totalQuizPoints - p.totalQuizPoints;
+        return this.getPoints() - p.getPoints();
     }
 
     //Metodos estaticos

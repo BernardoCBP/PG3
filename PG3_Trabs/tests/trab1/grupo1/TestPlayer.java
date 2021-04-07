@@ -105,7 +105,7 @@ public class TestPlayer {
         assertArrayEquals(Arrays.copyOf( array, n ), res );
     }
 
-    @Test
+        @Test
     public void testTop10() {
          Player[] array = {
                 new Player("aa", 8, 80), // 10

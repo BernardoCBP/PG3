@@ -1,6 +1,6 @@
 package trab1.grupo2;
 
-public class Trim extends SingleTranform {
+public class Trim extends SingleTransform {
 
     public Trim() {
         super("trim");
