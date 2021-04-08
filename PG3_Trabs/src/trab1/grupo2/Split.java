@@ -1,5 +1,7 @@
 package trab1.grupo2;
 
+import java.util.Arrays;
+
 public class Split extends Transform {
 
     // VARIABLES
@@ -14,26 +16,22 @@ public class Split extends Transform {
     // METHODS
     @Override
     public String[] apply( String ... s ) {
-        String sep = checkSeparator();
 
+        //String sep = checkSeparator();
+
+        String[] res = new String[0];
         int size = 0;
-        for( int i=0; i < s.length; i++ ) {
-            size += s[i].split(sep).length;
-        }
 
-        String[] res = new String[size];
-        // FAZER COM Array.copyOf() e APENAS um for
+        for (String value : s) {
+            String[] aux = value.split("\\" + this.separator);
 
-        size = 0;
-        for( int i=0; i < s.length; i++ ) {
-            String[] aux = s[i].split(sep);
-            System.arraycopy( aux, 0, res, size, aux.length );
             size += aux.length;
+            res = Arrays.copyOf(res, size);
+            System.arraycopy(aux, 0, res, size - aux.length, aux.length);
         }
-
         return res;
     }
-
+/*
     private String checkSeparator() {
         String sep = String.valueOf(this.separator);
         if(sep.equals("\\") || sep.equals("^") || sep.equals("$") || sep.equals(".") ||
@@ -46,5 +44,5 @@ public class Split extends Transform {
         }
         return sep;
     }
-
+*/
 }
