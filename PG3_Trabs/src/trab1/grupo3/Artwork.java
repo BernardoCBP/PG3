@@ -1,40 +1,49 @@
-/*package trab1.grupo3;
+package trab1.grupo3;
 
 import java.util.Objects;
 
-public abstract class Artwork implements Author {
+public abstract class Artwork {
 
-    public int year;
-    private String name;
+    public final int year;
+    private final String name;
+    private final Author author;
 
-    protected Artwork(int year, String name, Author a) {
+    protected Artwork( int year, String name, Author author) {
         this.year = year;
         this.name = name;
+        this.author = author;
 
     }
 
     public Author getAuthor() {
-        return null;
+        return this.author;
     }
 
-    public abstract Artwork getMatch(Artwork a);
+    public abstract Artwork getMatch( Artwork a );
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Artwork artwork = (Artwork) o;
-        return year == artwork.year && name.equals(artwork.name);
+        if( !(o instanceof Artwork) ) return false;
+        Artwork a = (Artwork) o;
+        return this.year == a.year && this.name.equals(a.name) && this.author.equals(a.author);
+
+
     }
 
+    @Override
     public String toString() {
+        return this.name + " (" + this.author.getName() + ") ";
 
     }
 
     public static Artwork getArtwork(Artwork a, Artwork ... aws) {
-
+        for(Artwork art: aws) {
+            if(a.equals(art))
+                return art;
+        }
+        return null;
     }
 
 
 }
-*/

@@ -4,4 +4,5 @@ public interface Author {
 
     String getName();
     boolean equals(Object o);
+
 }
