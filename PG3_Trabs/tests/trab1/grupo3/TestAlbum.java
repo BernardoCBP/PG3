@@ -41,13 +41,8 @@ public class TestAlbum {
                      "\t7 - Alma Rock (Alcoolémia) [03:34]\n" +
                      "\t8 - Derrotas da Paixão (Alcoolémia) [05:03]\n" +
                      "\t9 - Palma da Mão (Alcoolémia) [03:51]\n";
-       assertEquals(s, album.toString());
-       System.out.println(album.toString());
-    }
 
-    @Test
-    public void print() {
-        System.out.println(album.toString());
+       assertEquals(s, album.toString());
     }
 
     @Test

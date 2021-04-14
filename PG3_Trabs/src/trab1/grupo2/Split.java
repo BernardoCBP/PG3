@@ -17,13 +17,11 @@ public class Split extends Transform {
     @Override
     public String[] apply( String ... s ) {
 
-        //String sep = checkSeparator();
-
         String[] res = new String[0];
         int size = 0;
 
         for (String value : s) {
-            String[] aux = value.split("\\" + this.separator);
+            String[] aux = value.split("\\Q" + this.separator + "\\E");
 
             size += aux.length;
             res = Arrays.copyOf(res, size);
@@ -31,18 +29,4 @@ public class Split extends Transform {
         }
         return res;
     }
-/*
-    private String checkSeparator() {
-        String sep = String.valueOf(this.separator);
-        if(sep.equals("\\") || sep.equals("^") || sep.equals("$") || sep.equals(".") ||
-                sep.equals("|") || sep.equals("?") || sep.equals("*") || sep.equals("+") ||
-                sep.equals("(") || sep.equals(")") || sep.equals("[") || sep.equals("]") ||
-                sep.equals("{") || sep.equals("}") || sep.equals("<") || sep.equals(">") ||
-                sep.equals("-") || sep.equals("=") || sep.equals("!")
-        ) {
-            return "\\" + sep;
-        }
-        return sep;
-    }
-*/
 }

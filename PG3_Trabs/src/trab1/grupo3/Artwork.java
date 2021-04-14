@@ -38,9 +38,12 @@ public abstract class Artwork {
     }
 
     public static Artwork getArtwork(Artwork a, Artwork ... aws) {
+
         for(Artwork art: aws) {
-            if(a.equals(art))
-                return art;
+
+            Artwork match = art.getMatch(a);
+            if( match != null)
+                return match;
         }
         return null;
     }

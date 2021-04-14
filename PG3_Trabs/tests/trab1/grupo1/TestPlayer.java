@@ -76,7 +76,7 @@ public class TestPlayer {
                 new Player("dd", 2, 56)
         };
         for (Player p: array) {
-            assertEquals( p, Player.getPlayer( array,  p.getName()));
+            assertEquals( p, Player.getPlayer( array,  new String (p.getName())));
         }
         Player p = Player.getPlayer(array, "a" );
         assertEquals("a", p.getName());

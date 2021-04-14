@@ -16,6 +16,7 @@ public class Song extends Artwork {
         return this.equals(a) ? this : null;
     }
 
+    @Override
     public String toString() {
         return super.toString() + "[" + String.format("%02d", this.getSeconds()/60) + ":" + String.format("%02d", this.getSeconds()%60) + "]";
     }

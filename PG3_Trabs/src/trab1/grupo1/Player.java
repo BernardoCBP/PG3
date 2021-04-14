@@ -20,24 +20,26 @@ public class Player implements Comparable<Player> {
     }
 
     public Player(String toString){
-        setNumQuizzes( toString.substring(0, toString.indexOf(':')) );
-        setTotalQuizPoints( toString.substring(toString.indexOf(':')+1, toString.indexOf('-')) );
-        name = toString.substring( toString.indexOf('-')+1 ).trim();
+        int colon = toString.indexOf(':');
+        int hyphen = toString.indexOf('-');
+        setNumQuizzes( toString.substring(0, colon) );
+        setTotalQuizPoints( toString.substring(colon+1, hyphen ) );
+        name = toString.substring( hyphen+1 ).trim();
     }
 
     // SETTERS
-    public void setNumQuizzes( int numQuizzes ) {
+    private void setNumQuizzes( int numQuizzes ) {
         if( numQuizzes >= MIN_GAMES)
             this.numQuizzes = numQuizzes;
     }
-    public void setTotalQuizPoints( int totalQuizPoints ) {
+    private void setTotalQuizPoints( int totalQuizPoints ) {
         if( totalQuizPoints >= MIN_POINTS )
             this.totalQuizPoints = totalQuizPoints;
     }
-    public void setNumQuizzes( String str ) {
+    private void setNumQuizzes( String str ) {
         setNumQuizzes( Integer.parseInt(str.trim()) );
     }
-    public void setTotalQuizPoints( String str ) {
+    private void setTotalQuizPoints( String str ) {
         setTotalQuizPoints( Integer.parseInt(str.trim()) );
     }
 

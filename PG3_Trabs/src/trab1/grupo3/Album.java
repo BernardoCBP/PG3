@@ -5,41 +5,44 @@ import java.util.List;
 
 public class Album extends Artwork {
 
-    protected Song[] songs;
+    protected List<Song> songs;
 
     public Album( String name, Author author, Song ... s ) {
         super( Album.getLatest(s).year, name, author);
         if (s.length < 2) {
             throw new ArtworkException("The album must have at least two songs");
         }
-        this.songs = s;
+        Arrays.sort(s, (o1, o2) -> {
+            if (o1.year == o2.year)
+                return o1.toString().compareTo(o2.toString());
+            return o1.year - o2.year;
+        });
+
+        this.songs = Arrays.asList( s );
     }
 
     public Artwork getMatch ( Artwork a ) {
-        for (Song song : songs) {
+        for (Song song : this.songs) {
             if (song.equals(a))
                 return song;
         }
         return null;
     }
 
+    @Override
     public String toString() {
-        Arrays.sort(songs, new SongComparator());
-
         StringBuilder catString = new StringBuilder();
 
         catString.append(this.year).append(" - ").append(super.toString().trim()).append("\n");
-        for(int i=0; i < songs.length; i++ ) {
+        for(int i=0; i < this.songs.size(); i++ ) {
             catString.append("\t").append(i+1).append(" - ");
-            catString.append(songs[i].toString()).append("\n");
+            catString.append(this.getSongs().get(i).toString()).append("\n");
         }
         return catString.toString();
     }
 
     public List<Song> getSongs() {
-        Arrays.sort(songs, new SongComparator());
-        return Arrays.asList( songs );
-
+        return this.songs;
     }
 
     public static Song getLatest(Song ... s) {
