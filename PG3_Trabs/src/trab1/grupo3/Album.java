@@ -32,7 +32,7 @@ public class Album extends Artwork {
     @Override
     public String toString() {
         StringBuilder catString = new StringBuilder();
-
+    
         catString.append(this.year).append(" - ").append(super.toString().trim()).append("\n");
         for(int i=0; i < this.songs.size(); i++ ) {
             catString.append("\t").append(i+1).append(" - ");
