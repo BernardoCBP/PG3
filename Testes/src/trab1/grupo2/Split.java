@@ -18,15 +18,15 @@ public class Split extends Transform {
     public String[] apply( String ... s ) {
 
         String[] res = new String[0];
-
         int size = 0;
+
         for (String value : s) {
-            String[] aux = value.split("\\Q" + this.separator + "\\E" );
+            String[] aux = value.split("\\Q" + this.separator + "\\E");
+
             size += aux.length;
             res = Arrays.copyOf(res, size);
             System.arraycopy(aux, 0, res, size - aux.length, aux.length);
         }
         return res;
     }
-    // join + split
 }

@@ -19,12 +19,11 @@ public class Player implements Comparable<Player> {
         setTotalQuizPoints( totalQuizPoints );
     }
 
-    public Player(String toString) {
+    public Player(String toString){
         int colon = toString.indexOf(':');
         int hyphen = toString.indexOf('-');
-
-        setNumQuizzes( toString.substring( 0, colon ) );
-        setTotalQuizPoints( toString.substring( colon+1, hyphen ) );
+        setNumQuizzes( toString.substring(0, colon) );
+        setTotalQuizPoints( toString.substring(colon+1, hyphen ) );
         name = toString.substring( hyphen+1 ).trim();
     }
 

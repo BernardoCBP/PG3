@@ -6,57 +6,62 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CompositeRoyalty extends Royalty{
+public class CompositeRoyalty extends Royalty {
 
     private List<Royalty> royalties = new ArrayList<>();
 
-    public CompositeRoyalty(Artwork aw) {
+    public CompositeRoyalty( Artwork aw ) {
         super(aw);
     }
 
     public int getValue() {
-        int sum = 0;
-        for (Royalty royalty : this.royalties) {
-            sum += royalty.getValue();
+        int value = 0;
+        for( Royalty royalty : this.royalties ) {
+            value += royalty.getValue();
         }
-        return sum;
+        return value;
     }
 
-    public void pay() throws RoyaltyException {
-        for (Royalty royalty : this.royalties) {
-            royalty.pay();
+    public void pay() {
+        try {
+            for( Royalty royalty : this.royalties ) {
+                if( !(royalty.isPayed()) ) royalty.pay();
+            }
+        }
+        catch(RoyaltyException e) {
+            throw new RuntimeException("Unexpected Exception!");
         }
     }
 
     public boolean isPayed() {
         if( this.royalties.isEmpty() ) return false;
-        for (Royalty royalty : this.royalties) {
-            if (!royalty.isPayed()) return false;
+        for( Royalty royalty : this.royalties ) {
+            if( !(royalty.isPayed()) ) return false;
         }
         return true;
     }
 
-    public List<Royalty> getRoyalties(Predicate<Royalty> filter) {
-        List<Royalty> tempList = new ArrayList<>(this.royalties);
-        tempList.removeIf(filter.negate());
+    public List<Royalty> getRoyalties( Predicate<Royalty> filter ) {
+        List<Royalty> tempList = new ArrayList<>();
+
+        for (Royalty royalty : this.royalties) {
+            if (filter.test(royalty)) {
+                tempList.add(royalty);
+            }
+        }
         return tempList;
     }
 
-    public CompositeRoyalty append(Royalty r) throws RoyaltyException {
-        if( super.getArtwork() != r.getArtwork()) {
-            throw new RoyaltyException("Royalties artwork must match!");
-        }
+    public CompositeRoyalty append( Royalty r ) throws RoyaltyException {
+        if( super.getArtwork() != r.getArtwork() ) throw new RoyaltyException("Royalties artwork must match!");
         this.royalties.add(r);
-
         return this;
     }
 
     public int removePayed() {
-
-        int oldSize = this.royalties.size();
+        int nRoyalties = this.royalties.size();
         this.royalties.removeIf(Royalty::isPayed);
-        return oldSize - this.royalties.size();
-
+        return nRoyalties - this.royalties.size();
     }
 
     @Override

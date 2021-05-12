@@ -16,13 +16,13 @@ public abstract class Royalty {
 
     public abstract int getValue();
 
-    public abstract void pay() throws RoyaltyException;
-
     public abstract boolean isPayed();
+
+    public abstract void pay() throws RoyaltyException;
 
     @Override
     public boolean equals( Object o ) {
-        if(this == o ) return true;
+        if( this == o ) return true;
         if( !(o instanceof Royalty) ) return false;
         Royalty r = (Royalty) o;
         return this.artwork.equals(r.getArtwork()) && this.getValue() == r.getValue();
@@ -30,7 +30,7 @@ public abstract class Royalty {
 
     @Override
     public String toString() {
-        return "\u20ac" + this.getValue() + " --> " + this.artwork.toString();    //unicode value for euro: U+20AC
+        return "\u20ac" + this.getValue() + " --> " + this.artwork.toString(); //unicode value for euro: U+20AC
     }
 
 }
