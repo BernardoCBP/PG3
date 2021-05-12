@@ -7,6 +7,7 @@ import java.util.List;
 public class Team extends Item implements Composite {
     private final Consultant[] members;
     private final Manager leader;
+
     public Team(char id, Manager leader, Consultant ... members) throws ItemException{
         super( "Team "+ id );
         this.members= Arrays.copyOf(members, members.length);
@@ -50,7 +51,7 @@ public class Team extends Item implements Composite {
             if ( c != leader )
                 s.append("\n\t").append( c.getDescription() );
         }
-        s.append("\nTotal: ").append(getCost()).append("€");
+        s.append("\nTotal: ").append(getCost()).append("ï¿½");
         return s.toString();
     }
 
@@ -60,14 +61,14 @@ public class Team extends Item implements Composite {
             Consultant[] a = { new Consultant("Rui Dias", 24),
                     new Consultant("Ivo Mota", 8),
                     new Manager("Lia Lima", 24, 200),
-                    new Consultant("José Neto", 16) };
+                    new Consultant("Josï¿½ Neto", 16) };
             Team t = new Team('A', (Manager)a[2], a);
-            System.out.println(t+": "+t.getCost()+"€ ("+t.getItems().size()+" membros)");
-            System.out.println("Membros: "+t.getItems() +" Líder: " + t.getLeader() );
+            System.out.println(t+": "+t.getCost()+"ï¿½ ("+t.getItems().size()+" membros)");
+            System.out.println("Membros: "+t.getItems() +" Lï¿½der: " + t.getLeader() );
 
             System.out.println( t.getDescription() );
 
-            Team te = new Team('E', new Manager("José Silva",5,200), a); // Lança exceção
+            Team te = new Team('E', new Manager("Josï¿½ Silva",5,200), a); // Lanï¿½a exceï¿½ï¿½o
         } catch (ItemException ex) {
             System.out.println(ex.getMessage());
         }
