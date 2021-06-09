@@ -10,20 +10,26 @@ public class Name implements Comparable<Name> {
 
     public Name(String fullName) {
         this.fullName = fullName.trim().replaceAll("\\s+", " ");
-        String[] name = this.fullName.split(" ");
-        this.firstNames = String.join(" ", Arrays.copyOf(name, name.length-1));
-        this.surname = name[name.length-1];
+        if( this.fullName.contains(" ") ){
+            int index = this.fullName.lastIndexOf(' ');
+            firstNames = this.fullName.substring(0, index);
+            surname = this.fullName.substring(index+1);
+        }
+        else{
+            firstNames = "";
+            surname = this.fullName;
+        }
     }
 
-    public String getFirstNames() {
+    public final String getFirstNames() {
         return this.firstNames;
     }
 
-    public String getSurname() {
+    public final String getSurname() {
         return this.surname;
     }
 
-    public String getFullName() {
+    public final String getFullName() {
         return this.fullName;
     }
 
