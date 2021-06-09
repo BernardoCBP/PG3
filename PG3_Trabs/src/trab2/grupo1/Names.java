@@ -1,9 +1,6 @@
 package trab2.grupo1;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -11,13 +8,15 @@ import java.util.function.Predicate;
 
 public class Names {
 
-    public static <V> int forEachIf(BufferedReader in, Function<String, V> makeValue, Predicate<V> pred,
-                                    BiConsumer<V, Integer> action) throws IOException {
-        String line;
+    public static <V> int forEachIf(BufferedReader in, Function<String, V> makeValue,
+                                    Predicate<V> pred, BiConsumer<V, Integer> action) throws IOException {
+
         int count = 0;
+        String line;
+
         while( (line = in.readLine()) != null ) {
-            V value = makeValue.apply( line );
-            if( pred.test( value ) ) {
+            V value = makeValue.apply(line);
+            if( pred.test(value) ) {
                 action.accept(value, ++count);
             }
         }
@@ -25,20 +24,20 @@ public class Names {
     }
 
     public static void forEachIf(String filename, BiConsumer<Name, Integer> action, Set<String> surnames) throws IOException {
-        try( BufferedReader inputStream = new BufferedReader(new FileReader(filename)) ) {
-            forEachIf(inputStream,
-                    (line) -> { return new Name(line); },                                   // Function
-                    (value) -> { return surnames.contains( value.getSurname() ); },         // Predicate
+        try( BufferedReader rd = new BufferedReader( new FileReader(filename)) ) {
+
+            forEachIf(rd,
+                    Name::new,
+                    (value) -> { return surnames.contains(value.getSurname()); },
                     action);
         }
     }
 
     public static void appendIf(String filenameIn, String filenameOut, Set<String> surnames) throws IOException {
-        try(PrintWriter outputStream = new PrintWriter( filenameOut ) ) {
+        try(PrintWriter pw = new PrintWriter( new FileWriter(filenameOut, true) ) = {
+
             forEachIf(filenameIn,
-                    (name, integer) -> {
-                        outputStream.append(String.valueOf(integer)).append(name.getFullName());
-                    },
+                    (name, count) -> { pw.println(count.toString() + name.getFullName() ); },
                     surnames);
         }
     }
