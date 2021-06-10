@@ -5,9 +5,8 @@ import trab2.grupo1.Name;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public class Families {
@@ -62,7 +61,21 @@ public class Families {
 
     public static <S extends Set<Name>> Set<String> greaterFamilies( Map<String, S> families ) throws IOException {
 
-        return null;
+        if ( families.isEmpty() ) return Collections.emptySet();
+
+        SortedSet<String> mostMembers = new TreeSet<>(Collections.reverseOrder());
+        int max = 0;
+        for (Map.Entry<String, S> entry : families.entrySet()) {
+            if( entry.getValue().size() == max) {
+                mostMembers.add(entry.getKey());
+            }
+            else if ( entry.getValue().size() > max) {
+                max = entry.getValue().size();
+                mostMembers.clear();
+                mostMembers.add(entry.getKey());
+            }
+        }
+        return mostMembers;
     }
 
     public static void main(String[] args) {
