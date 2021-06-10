@@ -34,12 +34,11 @@ public class Names {
     }
 
     public static void appendIf(String filenameIn, String filenameOut, Set<String> surnames) throws IOException {
-        try(PrintWriter pw = new PrintWriter( new FileWriter(filenameOut, true) ) = {
+        try(PrintWriter pw = new PrintWriter( new FileWriter(filenameOut, true) ) ) {
 
-            forEachIf(filenameIn,
-                    (name, count) -> { pw.println(count.toString() + name.getFullName() ); },
-                    surnames);
+                forEachIf(filenameIn,
+                        (name, count) -> { pw.println(count.toString() + name.getFullName() ); },
+                        surnames);
         }
     }
-
 }
