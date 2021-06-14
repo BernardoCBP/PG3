@@ -19,7 +19,8 @@ public class DigitsExtense {
                     ch = rd.read();
                 }
                 digits.setCharAt(digits.length()-2, ')');
-                pw.write( digits.toString().trim() );
+                digits.setLength(digits.length()-1);
+                pw.write( digits.toString() );
             }
 
             if(ch == -1) break;

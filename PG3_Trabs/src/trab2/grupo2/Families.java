@@ -2,9 +2,7 @@ package trab2.grupo2;
 
 import trab2.grupo1.Name;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
@@ -78,8 +76,28 @@ public class Families {
         return mostMembers;
     }
 
-    public static void main(String[] args) {
+    void merge( File dir, String filenameOut ) throws IOException {
 
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        String[] OutFiles = { "families.txt" };
+
+        try ( BufferedReader inputStream = new BufferedReader( new FileReader("Names.txt" ) ) ) {
+
+            try(PrintWriter pwf = new PrintWriter( "families.txt"  ) )  {
+                Families.printFamilies(pwf, Families.families(new BufferedReader( new FileReader("Names.txt" ) ), HashMap::new, TreeSet::new));
+            }
+
+            try(PrintWriter pws = new PrintWriter( "sortFamilies.txt" ) )  {
+                Families.printFamilies(pws, Families.families(new BufferedReader( new FileReader("Names.txt" ) ), TreeMap::new, TreeSet::new));
+            }
+
+            try(PrintWriter pwo = new PrintWriter( "OriginalFamilies.txt" ) )  {
+                Families.printFamilies(pwo, Families.families(new BufferedReader( new FileReader("Names.txt" ) ), LinkedHashMap::new, TreeSet::new));
+            }
+        }
     }
 
 }
