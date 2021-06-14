@@ -1,23 +1,27 @@
 package trab2.grupo1;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.function.Function;
+import java.io.Writer;
+import java.util.*;
+
 
 public class NamesFrame extends JFrame {
 
     public static final int WIDTH = 200;
     public static final int HEIGHT = 200;
 
+    //Set<String> surnames = Set.of("Sousa", "Veiga");
+    Set<String> surnames = new TreeSet<>();
+
     private final JTextArea listArea = new JTextArea( 15, 40 );
     JTextField tfn = new JTextField("", 30 );
+    JTextField tfs = new JTextField("", 20 );
 
     public NamesFrame() {
         super("Names");
@@ -56,7 +60,6 @@ public class NamesFrame extends JFrame {
         south.setBorder( new TitledBorder("surnames management") );
 
         // surname
-        JTextField tfs = new JTextField("", 20 );
         tfs.setBorder( new TitledBorder("surname") );
         south.add(tfs);
 
@@ -88,29 +91,29 @@ public class NamesFrame extends JFrame {
      ***************************************************/
 
     private void listNames(ActionEvent actionEvent)  {
-        try(BufferedReader rd = new BufferedReader(new FileReader(tfn.getText().toString()) ) ) {
-            String line;
-            while( (line = rd.readLine()) != null ) {
-                Name name = new Name(line);
-                listArea.append(name.getFullName());
-                listArea.append("\n");
-            }
+        try {
+            String filename = tfn.getText();
+            Names.appendIf(filename, "NamesList.txt", surnames);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
         }
-
     }
 
     private void add(ActionEvent actionEvent) {
-
+        String surname = tfs.getText();
+        surnames.add(surname);
+        tfs.setText("");
     }
 
     private void remove(ActionEvent actionEvent) {
-
+        String surname = tfs.getText();
+        surnames.remove(surname);
+        tfs.setText("");
     }
 
     private void list(ActionEvent actionEvent) {
-
+        listArea.setText("");
+        surnames.forEach( (surname) -> listArea.append(surname + "\n") );
     }
 
     public static void main(String[] args) {
