@@ -1,13 +1,16 @@
-Sousa 3
+Sousa 4
 	Sousa, Bruno
+	Sousa, Francisco
 	Sousa, Luis Manuel
 	Sousa, Maria Manuela Torres
-Torres 2
+Torres 3
 	Torres, João Miguel
 	Torres, Maria
+	Torres, Pedro Manuel
 Pineda 1
 	Pineda, Bernardo
-Veiga 1
+Veiga 2
 	Veiga, Francisco Sousa
+	Veiga, João Pedro
 Barradas 1
 	Barradas, Daniel

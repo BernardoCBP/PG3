@@ -16,7 +16,7 @@ import java.util.function.*;
 public class FamiliesFrame extends JFrame {
     private final JFileChooser fileChooser = new JFileChooser( );
     // Os elementos devem ser iterados pela ordem em que são adicionados
-    private HashMap<String, SortedSet<Name> > namesPerFamily ; // to do
+    private HashMap<String, SortedSet<Name>> namesPerFamily = new HashMap<>();
 
     private final JTextArea listArea = new JTextArea( 15, 40 );
 
@@ -29,6 +29,17 @@ public class FamiliesFrame extends JFrame {
             new Itens("load", this::load),
             new Itens("save", this::save),
             new Itens("exit", this::exit)};
+
+    public final  Itens[] namesMenus = {
+            new Itens("Add", this::addName),
+            new Itens("Remove", this::removeName),
+            new Itens("List all", this::listNames)};
+
+    public final  Itens[] listMenus = {
+            new Itens("All surnames", this::listAllSurnames),
+            new Itens("All names per surname", this::listAllNamesPerSurname),
+            new Itens("Names with surname", this::listNamesWithSurname),
+            new Itens("Surnames most numerous", this::listFamiliesMostNumerous)};
 
      public FamiliesFrame(){
         super("Families");
@@ -44,9 +55,14 @@ public class FamiliesFrame extends JFrame {
         // << Adicionar os butões >>
         JPanel buttons = new JPanel();
         ((FlowLayout) buttons.getLayout()).setAlignment(FlowLayout.RIGHT);
-        JButton b = new JButton("clear");
-        b.addActionListener(this::clearNames);
-        buttons.add(b);
+        // add name
+         JButton b = new JButton("add name");
+         b.addActionListener(this::addName);
+         buttons.add(b);
+         // remove name
+         b = new JButton("remove name");
+         b.addActionListener(this::removeName);
+         buttons.add(b);
         //Adicionar os restants botões (adicionar e remover)
         // todo - usar o create para adicionar os três botões.
         cp.add(buttons, BorderLayout.SOUTH);
@@ -54,7 +70,9 @@ public class FamiliesFrame extends JFrame {
         //<< Adicionar os menus >>
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(create(new JMenu( "File"), JMenuItem::new, fileMenus));
-        //todo - adicionar os restantes menus
+        menuBar.add(create(new JMenu( "Names"), JMenuItem::new, namesMenus));
+        menuBar.add(create(new JMenu( "List"), JMenuItem::new, listMenus));
+
         setJMenuBar( menuBar );
         pack();
     }
@@ -99,7 +117,7 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent
      */
     private void listNames(ActionEvent actionEvent) {
-        //todo - usar o método list
+        //this.list("List of names:", namesPerFamily.keySet(), Name::getFullName );
     }
 
     /**
@@ -114,6 +132,7 @@ public class FamiliesFrame extends JFrame {
         if ( name != null && !name.isBlank())
             try {
                 //todo - adicionar o name ao contentor associativo namesPerFamily  - usar o método da alinea 2.
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
             }
@@ -167,7 +186,13 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent
      */
     private void load(ActionEvent actionEvent) {
-        //todo - usar o método families
+        fileChooser.setCurrentDirectory(new File("."));
+        if ( JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this) )
+            try ( BufferedReader rd = new BufferedReader( new FileReader(fileChooser.getSelectedFile()) ) ) {
+                //namesPerFamily = Families.families(rd, TreeMap::new, TreeSet::new);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
+            }
     }
 
     /**

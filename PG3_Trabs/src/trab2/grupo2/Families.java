@@ -4,7 +4,6 @@ import trab2.grupo1.Name;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 public class Families {
@@ -76,15 +75,30 @@ public class Families {
         return mostMembers;
     }
 
-    void merge( File dir, String filenameOut ) throws IOException {
+    public static void merge( File dir, String filenameOut ) throws IOException {
 
+        try(PrintWriter pw = new PrintWriter( filenameOut )) {
+
+            List<String> names = new ArrayList<>();
+
+            File[] listOfFiles = dir.listFiles();
+            for (int i = 0; i < Objects.requireNonNull(listOfFiles).length; i++) {
+                try (BufferedReader rd = new BufferedReader(new FileReader(listOfFiles[i]))) {
+                    String line;
+                    while( (line = rd.readLine()) != null ) {
+                        Name name = new Name(line);
+                        names.add(name.getFullName());
+                    }
+                }
+            }
+            Collections.sort(names);
+            for(String name : names){
+                pw.println(name);
+            }
+        }
     }
 
     public static void main(String[] args) throws IOException {
-
-        String[] OutFiles = { "families.txt" };
-
-        try ( BufferedReader inputStream = new BufferedReader( new FileReader("Names.txt" ) ) ) {
 
             try(PrintWriter pwf = new PrintWriter( "families.txt"  ) )  {
                 Families.printFamilies(pwf, Families.families(new BufferedReader( new FileReader("Names.txt" ) ), HashMap::new, TreeSet::new));
@@ -97,7 +111,8 @@ public class Families {
             try(PrintWriter pwo = new PrintWriter( "OriginalFamilies.txt" ) )  {
                 Families.printFamilies(pwo, Families.families(new BufferedReader( new FileReader("Names.txt" ) ), LinkedHashMap::new, TreeSet::new));
             }
-        }
+
+            Families.merge(new File("C:\\Users\\Berna\\OneDrive - Instituto Superior de Engenharia de Lisboa\\Old PC\\Documents\\Faculdade\\PG3\\PG3\\PG3_Trabs\\src\\trab2\\grupo2\\Text"), "filenameOut.txt");
     }
 
 }

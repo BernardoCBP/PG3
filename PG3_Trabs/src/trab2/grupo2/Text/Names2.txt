@@ -1,5 +1,7 @@
 Maria 	Manuela Torres Sousa
 Maria Torres
+Pedro	Manuel Torres
+João Pedro Veiga
 Bruno Sousa
 Bernardo Pineda
 Francisco Sousa 	Veiga
@@ -7,5 +9,3 @@ Daniel Barradas
 João Miguel     Torres
 	Luis Manuel Sousa
 Francisco Sousa
-Pedro	Manuel Torres
-João Pedro Veiga
