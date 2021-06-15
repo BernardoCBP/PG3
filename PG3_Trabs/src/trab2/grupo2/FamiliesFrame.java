@@ -63,6 +63,9 @@ public class FamiliesFrame extends JFrame {
          b = new JButton("remove name");
          b.addActionListener(this::removeName);
          buttons.add(b);
+         b = new JButton("clear");
+         b.addActionListener(this::clearNames);
+         buttons.add(b);
         cp.add(buttons, BorderLayout.SOUTH);
 
         //<< Adicionar os menus >>
@@ -116,8 +119,8 @@ public class FamiliesFrame extends JFrame {
      */
     private void listNames(ActionEvent actionEvent) {
         listArea.setText("");
-        namesPerFamily.forEach( (family, members ) -> { listArea.append( members. + "\n"); } );
-
+        namesPerFamily.forEach( (family, members ) -> { this.list("Names", members, Name::getFullName); } );
+        //namesPerFamily.forEach( (family, members ) -> { members.forEach( (name) -> listArea.append(name.getFullName() + "\n")); } );
     }
 
     /**
@@ -132,8 +135,7 @@ public class FamiliesFrame extends JFrame {
         if ( name != null && !name.isBlank())
             try {
                 //todo - adicionar o name ao contentor associativo namesPerFamily  - usar o método da alinea 2.
-                Map<String, TreeSet<Name>> map = (Families.families(new BufferedReader( new StringReader(name)), TreeMap::new, TreeSet::new) ) ;
-                namesPerFamily.putAll(map);
+                namesPerFamily = (Families.families(new BufferedReader( new StringReader(name)), () -> { return new HashMap<>(namesPerFamily); }, TreeSet::new) ) ;
                 this.listNames(actionEvent);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
@@ -147,6 +149,7 @@ public class FamiliesFrame extends JFrame {
      */
     private void clearNames(ActionEvent actionEvent) {
         namesPerFamily.clear();
+        listArea.setText("");
     }
 
     /**
@@ -158,7 +161,15 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent evento do action listener.
      */
     private void removeName(ActionEvent actionEvent) {
-        //todo
+        String name = JOptionPane.showInputDialog(this, "Name?", "Remove Name", JOptionPane.QUESTION_MESSAGE);
+        if ( name != null && !name.isBlank())
+            try {
+                Name fullName = new Name(name);
+                namesPerFamily.get(fullName.getSurname()).removeIf( (temp) -> { return temp.equals(fullName);  } );
+                this.listNames(actionEvent);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
     }
 
     /***************************************************
@@ -189,12 +200,14 @@ public class FamiliesFrame extends JFrame {
      */
     private void load(ActionEvent actionEvent) {
         fileChooser.setCurrentDirectory(new File("."));
-        if ( JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this) )
-            try ( BufferedReader rd = new BufferedReader( new FileReader(fileChooser.getSelectedFile()) ) ) {
-                //namesPerFamily = Families.families(rd, TreeMap::new, TreeSet::new);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
+        if ( JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this) ) {
+            try {
+                namesPerFamily = (Families.families(new BufferedReader( new FileReader(fileChooser.getSelectedFile())),  () -> { return new HashMap<>(namesPerFamily); }, TreeSet::new) ) ;
+                this.listNames(actionEvent);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
+        }
     }
 
     /**
@@ -203,7 +216,10 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent
      */
     private void exit( ActionEvent actionEvent ) {
-        //todo
+        int reply = JOptionPane.showConfirmDialog(this, "Save changes?", "Quit", JOptionPane.YES_NO_OPTION);
+        if(reply == JOptionPane.YES_OPTION) {
+            this.save(actionEvent);
+        }
     }
 
     /***************************************************
@@ -216,7 +232,8 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent
      */
     private void listAllSurnames(ActionEvent actionEvent) {
-        //todo - usar o método list
+        listArea.setText("");
+        this.list("Surnames", namesPerFamily.keySet(), String::toString);
     }
 
     /**
@@ -227,7 +244,19 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent
      */
     private void listAllNamesPerSurname( ActionEvent actionEvent ) {
-        //todo - USAR como auxiliar o método printFamilies
+        listArea.setText("");
+        try {
+            Families.printFamilies( new PrintWriter("listAllNamesPerSurname.txt")  , namesPerFamily );
+            System.out.println(namesPerFamily);
+            try( BufferedReader rd = new BufferedReader(new FileReader("listAllNamesPerSurname.txt")) ) {
+                String line;
+                while( (line = rd.readLine()) != null ) {
+                    listArea.append(line + "\n");
+                }
+            }
+        } catch(IOException e) {
+            JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
+        }
     }
 
     /**
@@ -238,7 +267,9 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent
      */
     private void listNamesWithSurname(ActionEvent actionEvent) {
-        //todo - usar o método list
+        String surname = JOptionPane.showInputDialog(this, "Surname?", "Insert surname", JOptionPane.QUESTION_MESSAGE);
+        listArea.setText("");
+        this.list("Family", namesPerFamily.get(surname), Name::getFirstNames);
     }
 
     /**
@@ -247,7 +278,12 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent
      */
     private void listFamiliesMostNumerous(ActionEvent actionEvent) {
-        //todo - usar o método greaterFamilies e list
+        listArea.setText("");
+        try {
+            this.list("Most Numerous Families", Families.greaterFamilies(namesPerFamily), String::toString);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {

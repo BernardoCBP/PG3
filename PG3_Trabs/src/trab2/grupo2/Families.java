@@ -51,10 +51,8 @@ public class Families {
 
         families.forEach( (family, members ) -> {
             pw.println( family + " " + members.size() );
-            for(Name names: members) {
-                pw.println("\t" + names);
-            }
-        }  );
+            members.forEach( (name) -> { pw.println("\t" + name.toString()); } );
+        } );
     }
 
     public static <S extends Set<Name>> Set<String> greaterFamilies( Map<String, S> families ) throws IOException {
