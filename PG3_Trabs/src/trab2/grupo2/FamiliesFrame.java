@@ -16,7 +16,7 @@ import java.util.function.*;
 public class FamiliesFrame extends JFrame {
     private final JFileChooser fileChooser = new JFileChooser( );
     // Os elementos devem ser iterados pela ordem em que são adicionados
-    private HashMap<String, SortedSet<Name>> namesPerFamily = new HashMap<>();
+    private Map<String, Set<Name>> namesPerFamily = new HashMap<>();
 
     private final JTextArea listArea = new JTextArea( 15, 40 );
 
@@ -63,8 +63,6 @@ public class FamiliesFrame extends JFrame {
          b = new JButton("remove name");
          b.addActionListener(this::removeName);
          buttons.add(b);
-        //Adicionar os restants botões (adicionar e remover)
-        // todo - usar o create para adicionar os três botões.
         cp.add(buttons, BorderLayout.SOUTH);
 
         //<< Adicionar os menus >>
@@ -117,7 +115,9 @@ public class FamiliesFrame extends JFrame {
      * @param actionEvent
      */
     private void listNames(ActionEvent actionEvent) {
-        //this.list("List of names:", namesPerFamily.keySet(), Name::getFullName );
+        listArea.setText("");
+        namesPerFamily.forEach( (family, members ) -> { listArea.append( members. + "\n"); } );
+
     }
 
     /**
@@ -132,7 +132,9 @@ public class FamiliesFrame extends JFrame {
         if ( name != null && !name.isBlank())
             try {
                 //todo - adicionar o name ao contentor associativo namesPerFamily  - usar o método da alinea 2.
-
+                Map<String, TreeSet<Name>> map = (Families.families(new BufferedReader( new StringReader(name)), TreeMap::new, TreeSet::new) ) ;
+                namesPerFamily.putAll(map);
+                this.listNames(actionEvent);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
             }
