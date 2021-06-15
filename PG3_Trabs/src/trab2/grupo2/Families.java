@@ -38,10 +38,11 @@ public class Families {
             Name name = new Name(line);
             String key = name.getSurname();
 
-            if( !map.containsKey(key) ) {
-                map.put(key, ss.get());
+            S elem;
+            if( (elem = map.get(key)) == null ) {
+                map.put(key, elem = ss.get());
             }
-            map.get(key).add(name);
+            elem.add(name);
         }
         return map;
     }
@@ -114,5 +115,4 @@ public class Families {
 
             Families.merge(new File("C:\\Users\\Berna\\OneDrive - Instituto Superior de Engenharia de Lisboa\\Old PC\\Documents\\Faculdade\\PG3\\PG3\\PG3_Trabs\\src\\trab2\\grupo2\\Text"), "filenameOut.txt");
     }
-
 }

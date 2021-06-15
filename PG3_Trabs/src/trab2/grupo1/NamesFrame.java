@@ -20,8 +20,8 @@ public class NamesFrame extends JFrame {
     Set<String> surnames = new TreeSet<>();
 
     private final JTextArea listArea = new JTextArea( 15, 40 );
-    JTextField tfn = new JTextField("", 30 );
-    JTextField tfs = new JTextField("", 20 );
+    private final JTextField tfn = new JTextField("", 30 );
+    private final JTextField tfs = new JTextField("", 20 );
 
     public NamesFrame() {
         super("Names");
@@ -89,11 +89,18 @@ public class NamesFrame extends JFrame {
      *  Métodos associados aos itens do surname management
      *
      ***************************************************/
-
+    //C:\Users\Berna\OneDrive - Instituto Superior de Engenharia de Lisboa\Old PC\Documents\Faculdade\PG3\PG3\PG3_Trabs/Names.txt
     private void listNames(ActionEvent actionEvent)  {
         try {
             String filename = tfn.getText();
             Names.appendIf(filename, "NamesList.txt", surnames);
+            try( BufferedReader rd = new BufferedReader(new FileReader("NamesList.txt")) ) {
+                String line;
+                listArea.setText("");
+                while( (line = rd.readLine()) != null) {
+                    listArea.append(line + "\n");
+                }
+            }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
         }
@@ -113,7 +120,7 @@ public class NamesFrame extends JFrame {
 
     private void list(ActionEvent actionEvent) {
         listArea.setText("");
-        surnames.forEach( (surname) -> listArea.append(surname + "\n") );
+        surnames.forEach( (surname) -> { listArea.append(surname + "\n"); } );
     }
 
     public static void main(String[] args) {
