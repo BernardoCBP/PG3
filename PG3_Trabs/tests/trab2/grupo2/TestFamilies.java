@@ -1,14 +1,24 @@
 package trab2.grupo2;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import trab2.grupo1.Name;
 
 import java.io.*;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestFamilies {
+
+    @Test
+    public void testisOrdered()  {
+        assertTrue( Families.isOrdered( Arrays.asList(95,80,54,35,26, 10), Integer::compareTo ) );
+        assertTrue( Families.isOrdered( Arrays.asList(10,26,35,54,80, 95), Integer::compareTo ) );
+        assertFalse( Families.isOrdered( Arrays.asList(95,80,85,35,105, 10), Integer::compareTo ) );
+        assertFalse( Families.isOrdered( Arrays.asList(95,80,80,35,26, 10), Integer::compareTo ) );
+    }
+
     @Test
     public void testFamilies() throws IOException {
         StringReader sr = new StringReader("Maria Manuela Torres Sousa\n" +

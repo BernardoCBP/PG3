@@ -1,0 +1,17 @@
+O jogo consiste num tabuleiro preenchido com várias bolhas coloridas. O objetivo do jogo é destruir o maior número de bolhas para fazer o 
+maior número de pontos no mínimo tempo. Para destruir as bolhas primeiro é necessário selecionar um conjunto de pelo menos duas bolhas.
+
+Quando é feito um click no botão esquerdo do mouse numa determinada bolha é selecionado um conjunto de bolhas, o número de bolhas 
+selecionadas depende da cor da bolha:
+
+  -Se a bolha for branca seleciona todas as bolhas da linha.
+  -Se a bolha for preta seleciona todas as bolhas da coluna.
+  -Se a bolha for vermelha, verde ou azul seleciona as bolhas da mesma cor que se encontram em cruz (esquerda, direita, cima e baixo).
+  -Se a bolha for amarela, rosa ou magenta seleciona as bolhas da mesma cor que seencontram a toda a volta (além de esquerda, direita, 
+  cima e baixo também seleciona as da diagonal).
+
+Quando é feito um click no botão esquerdo do mouse numa das bolhas do conjunto selecionado todas as bolhas do conjunto são destruídas 
+e as que se encontram por cimadescem (estratégia denominada gravitacional). Caso uma coluna fique vazia as que se encontram à direita 
+são deslocadas para a esquerda. A pontuação 𝒑 ao longo do jogo vai sendo atualizada dependendo da cor 𝒄 e do número 𝒏 de bolhas de cada 
+conjunto removido: 𝐩 = ∑ 𝐜 × 𝟐^𝒏−𝟐. Quando o jogo termina a pontuação tem que refletir o tempo que o jogo demorou e o número de bolhas 
+que não foram destruídas.

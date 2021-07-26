@@ -31,19 +31,17 @@ public class NamesFrame extends JFrame {
         Container cp = this.getContentPane();
         /*********** north ***************/
 
-        JPanel north = new JPanel();
+        JPanel north = new JPanel(new BorderLayout());
         north.setBorder( new TitledBorder("pathname") );
 
         north.add(tfn);
 
         /*********** BUTTON ***************/
-        JPanel button = new JPanel();
         // list names
         JButton bn = new JButton("list names");
         bn.addActionListener(this::listNames);
-        button.add(bn);
 
-        north.add(button);
+        north.add(bn, BorderLayout.EAST);
 
         cp.add(north, BorderLayout.NORTH);
 
@@ -93,14 +91,7 @@ public class NamesFrame extends JFrame {
     private void listNames(ActionEvent actionEvent)  {
         try {
             String filename = tfn.getText();
-            Names.appendIf(filename, "NamesList.txt", surnames);
-            try( BufferedReader rd = new BufferedReader(new FileReader("NamesList.txt")) ) {
-                String line;
-                listArea.setText("");
-                while( (line = rd.readLine()) != null) {
-                    listArea.append(line + "\n");
-                }
-            }
+            Names.forEachIf(filename, (name, integer) -> { listArea.append( integer + name.getFullName() ); }, surnames );
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
         }

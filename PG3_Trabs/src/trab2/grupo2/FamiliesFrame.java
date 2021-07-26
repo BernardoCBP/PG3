@@ -16,7 +16,7 @@ import java.util.function.*;
 public class FamiliesFrame extends JFrame {
     private final JFileChooser fileChooser = new JFileChooser( );
     // Os elementos devem ser iterados pela ordem em que são adicionados
-    private Map<String, Set<Name>> namesPerFamily = new HashMap<>();
+    private Map<String, Set<Name>> namesPerFamily = new LinkedHashMap<>();
 
     private final JTextArea listArea = new JTextArea( 15, 40 );
 
@@ -120,7 +120,7 @@ public class FamiliesFrame extends JFrame {
     private void listNames(ActionEvent actionEvent) {
         listArea.setText("");
         namesPerFamily.forEach( (family, members ) -> { this.list("Names", members, Name::getFullName); } );
-        //namesPerFamily.forEach( (family, members ) -> { members.forEach( (name) -> listArea.append(name.getFullName() + "\n")); } );
+        //namesPerFamily.values().forEach( ( SortedSet<Name> s) -> list("Names", s, Name::getFullName) );
     }
 
     /**
@@ -134,8 +134,7 @@ public class FamiliesFrame extends JFrame {
         String name = JOptionPane.showInputDialog(this, "Name?", "Add name", JOptionPane.QUESTION_MESSAGE);
         if ( name != null && !name.isBlank())
             try {
-                //todo - adicionar o name ao contentor associativo namesPerFamily  - usar o método da alinea 2.
-                namesPerFamily = (Families.families(new BufferedReader( new StringReader(name)), () -> { return new HashMap<>(namesPerFamily); }, TreeSet::new) ) ;
+                namesPerFamily = Families.families(new BufferedReader( new StringReader(name)), () -> namesPerFamily, TreeSet::new);
                 this.listNames(actionEvent);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
@@ -162,14 +161,14 @@ public class FamiliesFrame extends JFrame {
      */
     private void removeName(ActionEvent actionEvent) {
         String name = JOptionPane.showInputDialog(this, "Name?", "Remove Name", JOptionPane.QUESTION_MESSAGE);
-        if ( name != null && !name.isBlank())
-            try {
-                Name fullName = new Name(name);
-                namesPerFamily.get(fullName.getSurname()).removeIf( (temp) -> { return temp.equals(fullName);  } );
-                this.listNames(actionEvent);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
+        if ( name != null && !name.isBlank()) {
+            Name fullName = new Name(name);
+            var s = namesPerFamily.get(fullName.getSurname());
+            s.remove(fullName);
+            if (s.isEmpty()) {
+                namesPerFamily.remove(fullName.getSurname());
             }
+        }
     }
 
     /***************************************************
@@ -201,11 +200,11 @@ public class FamiliesFrame extends JFrame {
     private void load(ActionEvent actionEvent) {
         fileChooser.setCurrentDirectory(new File("."));
         if ( JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this) ) {
-            try {
-                namesPerFamily = (Families.families(new BufferedReader( new FileReader(fileChooser.getSelectedFile())),  () -> { return new HashMap<>(namesPerFamily); }, TreeSet::new) ) ;
+            try ( BufferedReader br = new BufferedReader( new FileReader(fileChooser.getSelectedFile())) ){
+                namesPerFamily = Families.families(br,  () -> namesPerFamily, TreeSet::new);
                 this.listNames(actionEvent);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
             }
         }
     }
@@ -246,16 +245,11 @@ public class FamiliesFrame extends JFrame {
     private void listAllNamesPerSurname( ActionEvent actionEvent ) {
         listArea.setText("");
         try {
-            Families.printFamilies( new PrintWriter("listAllNamesPerSurname.txt")  , namesPerFamily );
-            System.out.println(namesPerFamily);
-            try( BufferedReader rd = new BufferedReader(new FileReader("listAllNamesPerSurname.txt")) ) {
-                String line;
-                while( (line = rd.readLine()) != null ) {
-                    listArea.append(line + "\n");
-                }
-            }
+            StringWriter sw = new StringWriter();
+            Families.printFamilies(new PrintWriter( sw ), namesPerFamily);
+            listArea.setText( sw.toString() );
         } catch(IOException e) {
-            JOptionPane.showMessageDialog(this, "Error file: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
 
@@ -269,7 +263,9 @@ public class FamiliesFrame extends JFrame {
     private void listNamesWithSurname(ActionEvent actionEvent) {
         String surname = JOptionPane.showInputDialog(this, "Surname?", "Insert surname", JOptionPane.QUESTION_MESSAGE);
         listArea.setText("");
-        this.list("Family", namesPerFamily.get(surname), Name::getFirstNames);
+        if(surname != null && !surname.isBlank()) {
+            this.list("Family", namesPerFamily.get(surname), Name::getFirstNames);
+        }
     }
 
     /**

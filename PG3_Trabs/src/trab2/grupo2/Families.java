@@ -9,17 +9,19 @@ import java.util.function.Supplier;
 public class Families {
 
     public static <V> boolean isOrdered(Iterable<V> serie, Comparator<V> compareValue ) {
+
+        boolean ascending = true;
+        boolean descending = true;
+
         V prev = null;
         for(V curr: serie) {
-            if( prev != null && compareValue.compare(prev, curr) > 0 ) { //entra se prev for maior do que curr
-                break;
+            if( prev != null && ascending && compareValue.compare(prev, curr) >= 0 ) { //entra se prev for maior do que curr
+                ascending = false;                                                     //ja não pode ser por ordem descendente
             }
-            prev = curr;
-        }
-
-        prev = null;
-        for(V curr: serie) {
-            if( prev != null && compareValue.compare(prev, curr) < 0 ) { //entra se curr for maior do que prev
+            else if( prev != null && descending && compareValue.compare(prev, curr) <= 0 ) { //entra se curr for maior do que prev
+                descending = false;                                                     //ja não pode ser por ordem crescente
+            }
+            if( !ascending && !descending) {
                 return false;
             }
             prev = curr;
@@ -60,6 +62,7 @@ public class Families {
         if ( families.isEmpty() ) return Collections.emptySet();
 
         SortedSet<String> mostMembers = new TreeSet<>(Collections.reverseOrder());
+
         int max = 0;
         for (Map.Entry<String, S> entry : families.entrySet()) {
             if( entry.getValue().size() == max) {
@@ -111,6 +114,5 @@ public class Families {
                 Families.printFamilies(pwo, Families.families(new BufferedReader( new FileReader("Names.txt" ) ), LinkedHashMap::new, TreeSet::new));
             }
 
-            Families.merge(new File("C:\\Users\\Berna\\OneDrive - Instituto Superior de Engenharia de Lisboa\\Old PC\\Documents\\Faculdade\\PG3\\PG3\\PG3_Trabs\\src\\trab2\\grupo2\\Text"), "filenameOut.txt");
     }
 }
